@@ -44,7 +44,7 @@ setx AZURE_TENANT_ID "your-tenant-id"
 setx AZURE_SUBSCRIPTION_ID "your-subscription-id"
 ```
 
-### 2. Create Virtual Environemnt & Install requirements.txt
+### 3. Create Virtual Environemnt & Install requirements.txt
 
 ```
 python -m venv myenv

@@ -1,7 +1,7 @@
-# Azure_SDK
-# Azure Service Principal Setup and Resource Listing
+# Azure SDK
+# Azure Service Principal Setup and Resource Access
 
-This repository provides instructions and scripts for setting up an Azure Service Principal and using it to list Azure resources.
+This repository provides instructions and scripts for setting up an Azure Service Principal and using it to access Azure resources.
 
 ## Prerequisites
 

@@ -1,28 +1,35 @@
 import os
 from azure.identity import DefaultAzureCredential, AzureError
-from azure.mgmt.resource import SubscriptionClient
+from azure.mgmt.resource import ResourceManagementClient
 from azure.core.exceptions import HttpResponseError, ClientAuthenticationError
 
-def list_subscriptions():
+def list_resource_groups_and_resources():
     try:
         # Authenticate using the default Azure credentials
         credential = DefaultAzureCredential()
 
-        # Initialize the SubscriptionClient
-        subscription_client = SubscriptionClient(credential)
+        # Initialize the ResourceManagementClient
+        subscription_id = os.getenv("AZURE_SUBSCRIPTION_ID")
+        resource_client = ResourceManagementClient(credential, subscription_id)
 
-        # List all subscriptions
-        subscriptions = list(subscription_client.subscriptions.list())
+        # List all resource groups
+        resource_groups = resource_client.resource_groups.list()
 
-        # Check if the subscriptions list is populated
-        if subscriptions:
-            for subscription in subscriptions:
-                print(f"Subscription ID: {subscription.subscription_id}")
-                print(f"Subscription Display Name: {subscription.display_name}")
-                print(f"Subscription State: {subscription.state}")
+        # Check if the resource groups list is populated
+        if resource_groups:
+            for rg in resource_groups:
+                print(f"Resource Group: {rg.name}")
                 print("-" * 30)
+
+                # List resources in the resource group
+                resources = resource_client.resources.list_by_resource_group(rg.name)
+                for resource in resources:
+                    print(f"Resource Name: {resource.name}")
+                    print(f"Resource Type: {resource.type}")
+                    print(f"Resource ID: {resource.id}")
+                    print("-" * 20)
         else:
-            print("No subscriptions found.")
+            print("No resource groups found.")
     except ClientAuthenticationError as auth_err:
         print(f"Authentication error: {auth_err}")
     except HttpResponseError as http_err:
@@ -41,4 +48,4 @@ if __name__ == "__main__":
             print(f"Environment variable {var} is not set. Please set it before running the script.")
             exit(1)
     
-    list_subscriptions()
+    list_resource_groups_and_resources()

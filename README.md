@@ -35,15 +35,14 @@ This repository provides instructions and scripts for setting up an Azure Servic
 
 4. Copy the `clientId`, `clientSecret`, `tenantId`, and `subscriptionId` values.
 
-### 2. Set Environment Variables
-
-#### Windows
+### 2. Set Windows Environment Variables
 
 ```powershell
 setx AZURE_CLIENT_ID "your-client-id"
 setx AZURE_CLIENT_SECRET "your-client-secret"
 setx AZURE_TENANT_ID "your-tenant-id"
 setx AZURE_SUBSCRIPTION_ID "your-subscription-id"
+```
 
 ### 2. Create Virtual Environemnt & Install requirements.txt
 

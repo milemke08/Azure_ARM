@@ -1,7 +1,7 @@
 import os
-from azure.identity import DefaultAzureCredential, AzureError
+from azure.identity import DefaultAzureCredential
 from azure.mgmt.resource import ResourceManagementClient
-from azure.core.exceptions import HttpResponseError, ClientAuthenticationError
+from azure.core.exceptions import AzureError, HttpResponseError, ClientAuthenticationError
 
 def list_resource_groups_and_resources():
     try:

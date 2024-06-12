@@ -1,3 +1,4 @@
+import os
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.storage import StorageManagementClient
@@ -12,7 +13,7 @@ def main():
         storage_client = StorageManagementClient(credential, subscription_id)
 
         # Define parameters
-        resource_group = 'myResourceGroup'
+        resource_group_name = 'myResourceGroup'
         location = 'eastus'
         storage_account_name = 'mystrgeactazsdk2_adlsv2'
 

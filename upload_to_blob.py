@@ -6,8 +6,7 @@ from azure.core.exceptions import ResourceExistsError, AzureError
 # Retrieve environment variables
 account_url = "https://<your-storage-account-name>.blob.core.windows.net"
 container_name = "mycontainer"
-local_file_name = "sample.txt"  # Sample file to upload
-blob_name = "uploaded-sample.txt"
+files_to_upload = ["sample1.txt", "sample2.txt", "sample3.txt"]  # List of files to upload
 
 try:
     # Authenticate
@@ -22,11 +21,14 @@ try:
     except ResourceExistsError:
         print(f"Container '{container_name}' already exists.")
 
-    # Upload the file
-    blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
-    with open(local_file_name, "rb") as data:
-        blob_client.upload_blob(data, overwrite=True)
-        print(f"File '{local_file_name}' uploaded to blob '{blob_name}' successfully.")
+    # Upload each file
+    for local_file_name in files_to_upload:
+        blob_name = os.path.basename(local_file_name)
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+
+        with open(local_file_name, "rb") as data:
+            blob_client.upload_blob(data, overwrite=True)
+            print(f"File '{local_file_name}' uploaded to blob '{blob_name}' successfully.")
 
 except AzureError as e:
     print(f"An error occurred: {e}")

@@ -7,14 +7,14 @@ def main():
     try:
         # Set up Azure credentials and clients
         credential = DefaultAzureCredential()
-        subscription_id = 'your-subscription-id'  # replace with your subscription ID
+        subscription_id = os.getenv('AZURE_SUBSCRIPTION_ID')
         resource_client = ResourceManagementClient(credential, subscription_id)
         storage_client = StorageManagementClient(credential, subscription_id)
 
         # Define parameters
-        resource_group_name = 'yourResourceGroup'
-        location = 'yourLocation'
-        storage_account_name = 'yourstorageaccount'
+        resource_group = 'myResourceGroup'
+        location = 'eastus'
+        storage_account_name = 'mystrgeactazsdk2_adlsv2'
 
         # Create resource group
         print("Creating resource group...")

@@ -19,8 +19,12 @@ This repository provides instructions and scripts for setting up an Azure Servic
     ```bash
     az ad sp create-for-rbac --name "myServicePrincipal" --role contributor --scopes /subscriptions/{subscription-id} --sdk-auth
     ```
+3. The service principal should have at least the "Storage Blob Data Contributor" role to upload files to Blob Storage. You can assign this role using the Azure CLI:
+    ```bash
+    az role assignment create --assignee <clientId> --role "Storage Blob Data Contributor" --scope /subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.Storage/storageAccounts/<storageAccountName>
+    ```
 
-3. The command will output JSON with the following details:
+4. The command will output JSON with the following details:
 
     ```json
     {
@@ -33,7 +37,7 @@ This repository provides instructions and scripts for setting up an Azure Servic
     }
     ```
 
-4. Copy the `clientId`, `clientSecret`, `tenantId`, and `subscriptionId` values.
+5. Copy the `clientId`, `clientSecret`, `tenantId`, and `subscriptionId` values.
 
 ### 2. Set Windows Environment Variables
 

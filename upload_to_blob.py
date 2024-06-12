@@ -5,8 +5,10 @@ from azure.core.exceptions import ResourceExistsError, AzureError
 
 # Retrieve environment variables
 account_url = "https://<your-storage-account-name>.blob.core.windows.net"
-container_name = "mycontainer"
-files_to_upload = ["sample1.txt", "sample2.txt", "sample3.txt"]  # List of files to upload
+container_name = "blobuploadcontainer"
+files_to_upload = ["DALL·E 2024-06-11 19.40.20 - A detailed visualization of neural activation.webp", 
+                   "DALL·E 2024-06-11 19.41.34 - A highly abstract visualization of neural activation.webp", 
+                   "DALL·E 2024-06-11 19.42.35 - A completely abstract visualization of neural activation in an artificial intelligence model.webp"]  # List of files to upload
 
 try:
     # Authenticate

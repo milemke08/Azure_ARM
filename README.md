@@ -40,6 +40,11 @@ This repository provides instructions and scripts for setting up an Azure Servic
     az role assignment create --assignee <clientId> --role "Storage Blob Data Contributor" --scope /subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.Storage/storageAccounts/<storageAccountName>
     ```
 
+6. The service principal should have at least the "Data Factory Contributor" role to upload files to see linked services. You can assign this role using the Azure CLI:
+   ```bash
+    az role assignment create --assignee <clientId> --role "Data Factory Contributor" --scope /subscriptions/<subscriptionId>/resourceGroups/myResourceGroup/providers/Microsoft.DataFactory/factories/<factoryName>
+   ```
+
 ### 2. Set Windows Environment Variables
 
 ```powershell

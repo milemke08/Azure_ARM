@@ -3,6 +3,8 @@ from azure.mgmt.datafactory import DataFactoryManagementClient
 from azure.mgmt.datafactory.models import Factory
 from azure.mgmt.datafactory.models import *
 from azure.mgmt.storage import StorageManagementClient
+import os
+from dotenv import load_dotenv
 
 def create_data_factory(subscription_id, resource_group_name, data_factory_name, location):
     try:
@@ -93,22 +95,23 @@ def run_pipeline(resource_group_name, data_factory_name, pipeline_name):
     print(f"Pipeline run triggered successfully with run ID: {run_response.run_id}")
 
 if __name__ == "__main__":
-    subscription_id = 'your-subscription-id'  # Replace with your Azure subscription ID
-    resource_group_name = 'your-Resource-Group'  # Replace with your resource group name
-    data_factory_name = 'your-data-factory'  # Replace with your Data Factory name
-    location = 'eastus'  # Replace with your location, e.g., 'eastus'
-    data_lake_linked_service  = 'your-linked-service'  # Replace with your linked service name
-    storage_account_name = 'your-storage-account'  # Replace with your storage account name
-    storage_account_key = 'yourstorageaccountkey'  # Replace with your storage account key
+    load_dotenv()
+    subscription_id = os.getenv('AZURE_SUBSCRIPTION_ID')  # Replace with your Azure subscription ID 
+    resource_group_name = os.getenv('RESOURCE_GROUP_NAME')  # Replace with your resource group name
+    data_factory_name = os.getenv('DATA_FACTORY_NAME')  # Replace with your Data Factory name
+    location = os.getenv('LOCATION')  # Replace with your location, e.g., 'eastus'
+    data_lake_linked_service  = os.getenv('DATA_LAKE_LINKED_SERVICE')  # Replace with your linked service name
+    storage_account_name = os.getenv('STORAGE_ACCOUNT_NAME') # Replace with your storage account name
+    storage_account_key = os.getenv('STORAGE_ACCOUNT_KEY')  # Replace with your storage account key
 
-    blob_storage_linked_service_name = 'your-linked-service'  # Replace with your linked service name
-    blob_storage_account_name = 'your-storage-account'  # Replace with your storage account name
-    blob_storage_account_key = 'yourstorageaccountkey'  # Replace with your storage account key
+    blob_storage_linked_service_name = os.getenv('BLOB_STORAGE_LINKED_SERVICE_NAME')  # Replace with your linked service name
+    blob_storage_account_name = os.getenv('BLOB_STORAGE_ACCOUNT_NAME')  # Replace with your storage account name
+    blob_storage_account_key = os.getenv('BLOB_STORAGE_ACCOUNT_KEY')  # Replace with your storage account key
 
-    blob_container = 'your-blob-container'  # Replace with your Blob container name
-    blob_path = 'your-blob-path'  # Replace with your Blob file path
-    data_lake_file_system = 'yourfilesystem'  # Replace with your Data Lake file system name
-    data_lake_directory = 'yourdirectory'  # Replace with your Data Lake directory
+    blob_container = os.getenv('BLOB_CONTAINER')  # Replace with your Blob container name
+    blob_path = os.getenv('BLOB_PATH')  # Replace with your Blob file path
+    data_lake_file_system = os.getenv('DATA_LAKE_FILE_SYSTEM')  # Replace with your Data Lake file system name
+    data_lake_directory = os.getenv('DATA_LAKE_DIRECTORY')  # Replace with your Data Lake directory
 
     create_data_factory(subscription_id, resource_group_name, data_factory_name, location)
 

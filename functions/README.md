@@ -28,8 +28,7 @@ func new --name ProcessBlobFunction --template "Azure Blob Storage trigger"
 
 Update local.settings.json:
 
-json
-```
+```json
 {
   "IsEncrypted": false,
   "Values": {

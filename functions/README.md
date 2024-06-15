@@ -23,7 +23,7 @@ Create a Function App:
 ```bash
 func init ProcessBlobFunctionApp --python
 cd ProcessBlobFunctionApp
-func new --name ProcessBlobFunction --template "Azure Blob Storage trigger"
+func new --name ProcessBlobFunction --template "Blob trigger"
 ```
 
 Update local.settings.json:
@@ -39,7 +39,11 @@ Update local.settings.json:
   }
 }
 ```
-  #### Step 2: Install Azure SDK for Python
+  #### Step 2: Create a Function App in Azure
   ```bash
-  pip install azure-storage-blob
+  az functionapp create --resource-group {resource_group_name} --consumption-plan-location {location} --runtime python --runtime-version 3.8 --functions-version 3 --name {function_app_name} --storage-account {storage_account_name} --os-type Linux
 ```
+ #### Step 3: Publish the app
+  ```bash
+  func azure functionapp publish uniqueFunctionAppName
+  ```

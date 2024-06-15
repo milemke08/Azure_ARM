@@ -22,7 +22,7 @@ Create a Function App:
 
 ```bash
 func init ProcessBlobFunctionApp --python
-cd ProcessBlobFunctionApp
+cd .\functions\ProcessBlobFunctionApp\
 func new --name ProcessBlobFunction --template "Azure Blob Storage trigger"
 ```
 

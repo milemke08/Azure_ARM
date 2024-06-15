@@ -1,0 +1,16 @@
+
+# Python environment
+myenv
+
+# Ignore all log files
+*.log
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Ignore temp files
+*.tmp
+
+# dotenv environment variables file
+.env

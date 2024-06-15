@@ -29,7 +29,7 @@ func new --name ProcessBlobFunction --template "Azure Blob Storage trigger"
 Update local.settings.json:
 
 json
-Copy code
+```
 {
   "IsEncrypted": false,
   "Values": {
@@ -39,6 +39,7 @@ Copy code
     "AzureWebJobsBlobOutput": "<Your_Output_Container>"
   }
 }
+```
   ####Step 2: Install Azure SDK for Python
   bash
   Copy code

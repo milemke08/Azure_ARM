@@ -2,7 +2,7 @@
 ## 1. Overview
 ## Title: Azure Function to Process Data in Blob Storage and Save Results Back
 
-Description: This repository contains an Azure Function that processes data stored in Azure Blob Storage and saves the processed results back to Blob Storage. The documentation includes setup instructions, the function code, and error handling.
+This repository contains an Azure Function that processes data stored in Azure Blob Storage and saves the processed results back to Blob Storage. The documentation includes setup instructions, the function code, and error handling.
 
 ## 2. Prerequisites
 - An Azure account with an active subscription.

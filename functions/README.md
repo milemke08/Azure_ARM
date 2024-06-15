@@ -39,7 +39,7 @@ Update local.settings.json:
   }
 }
 ```
-  ####Step 2: Install Azure SDK for Python
-  bash
-  Copy code
+  #### Step 2: Install Azure SDK for Python
+  ```bash
   pip install azure-storage-blob
+```

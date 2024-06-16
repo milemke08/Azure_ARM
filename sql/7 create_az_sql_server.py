@@ -10,8 +10,8 @@ from azure.mgmt.sql.models import Server, Database, Sku
 load_dotenv()
 RESOURCE_GROUP_NAME = os.getenv('RESOURCE_GROUP_NAME')
 LOCATION = os.getenv('LOCATION')
-SQL_SERVER_NAME = "my-sql-server-az-dev"
-SQL_DATABASE_NAME = "my-database"
+SQL_SERVER_NAME = os.getenv('SQL_SERVER_NAME')
+SQL_DATABASE_NAME = os.getenv('SQL_DATABASE_NAME')
 ADMIN_USER = os.getenv('ADMIN_USER')
 ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
 

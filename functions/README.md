@@ -42,8 +42,13 @@ Update local.settings.json:
   #### Step 2: Create a Function App in Azure
   ```bash
   az functionapp create --resource-group {resource_group_name} --consumption-plan-location {location} --runtime python --runtime-version 3.8 --functions-version 3 --name {function_app_name} --storage-account {storage_account_name} --os-type Linux
-```
- #### Step 3: Publish the app
+  ```
+  #### Step 3: Set Application settings
+  ```bash
+  az functionapp config appsettings set --name myProcessBlobFunctionApp --resource-group myResourceGroup --settings AzureWebJobsStorage="DefaultEndpointsProtocol=https;AccountName=your_source_account_name;AccountKey=your_source_account_key;EndpointSuffix=core.windows.net" ADLSGen2Storage="DefaultEndpointsProtocol=https;AccountName=your_adls_account_name;AccountKey=your_adls_account_key;EndpointSuffix=core.windows.net"
+  ```
+
+  #### Step 4: Publish the app
   ```bash
   func azure functionapp publish uniqueFunctionAppName
   ```

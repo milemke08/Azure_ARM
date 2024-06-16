@@ -6,3 +6,4 @@ azure-storage-blob
 azure-storage-file-datalake
 azure-mgmt-datafactory
 azure-functions
+azure-mgmt-sql

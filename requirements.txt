@@ -8,3 +8,4 @@ azure-mgmt-datafactory
 azure-functions
 azure-mgmt-sql
 pyodbc
+pandas

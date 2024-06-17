@@ -1,0 +1,61 @@
+﻿Day,Entry,Outline,Completion Date
+1,Azure Service Principal Setup and Resource Listing (Completed),This repository provides instructions and scripts for setting up an Azure Service Principal and using it to list Azure resources.,6/10/2024
+2,Create an Azure Storage Account,"Write a script to create an Azure Storage Account using the Azure SDK for Python.
+Document the setup process and include the script in the repository.",6/11/2024
+3,Uploading Files to Azure Blob Storage,"Write a script to upload files to Azure Blob Storage.
+Demonstrate the upload process with a sample file and document it in the README.",6/11/2024
+4,Azure Data Lake Storage Gen2 Setup,"Create a script to set up Azure Data Lake Storage Gen2.
+Include documentation on the benefits and use cases of Data Lake Storage.",6/12/2024
+5,Ingesting Data into Azure Data Lake,"Write a script to ingest data from a local file system into Azure Data Lake Storage Gen2.
+Document the process and include examples.",6/13/2024
+6,Basic Data Transformation with Azure Data Factory,"Create a simple Azure Data Factory pipeline to move data from Blob Storage to Data Lake Storage.
+Document the pipeline creation process and include screenshots.",6/14/2024
+7,Azure Function for Data Processing,"Write an Azure Function to process data in Blob Storage and save the results back to Blob Storage.
+Document the function setup and include the code.",6/16/2024
+8,Setting Up Azure SQL Database,"Write a script to create an Azure SQL Database.
+Document the setup process and include the script.",6/16/2024
+9,Connecting to Azure SQL Database with Python,"Write a Python script to connect to the Azure SQL Database and perform basic CRUD operations.
+Document the connection process and include examples.",6/16/2024
+10,Data Ingestion into Azure SQL Database,"Write a script to ingest data from a CSV file into the Azure SQL Database.
+Document the ingestion process and include the script.",
+11,Basic Data Transformation in Azure Databricks,"Create a Databricks notebook to perform basic data transformations on data stored in Azure Data Lake.
+Document the setup process and include the notebook.",
+12,Automating Data Pipelines with Azure Data Factory,"Create an Azure Data Factory pipeline to automate the data ingestion and transformation processes.
+Document the pipeline setup and include screenshots.",
+13,Real-time Data Processing with Azure Stream Analytics,"Write a script to set up an Azure Stream Analytics job to process real-time data.
+Document the setup process and include the script.",
+14,Visualizing Data with Power BI and Azure Synapse Analytics,"Create a Power BI report connected to data stored in Azure Synapse Analytics.
+Document the setup process and include screenshots.",
+15,Setting Up Azure Cosmos DB,"Write a script to create an Azure Cosmos DB account and database.
+Document the setup process and include the script.",
+16,Ingesting Data into Azure Cosmos DB,"Write a script to ingest data from a JSON file into Azure Cosmos DB.
+Document the ingestion process and include the script.",
+17,Querying Data in Azure Cosmos DB with SQL API,"Write a script to query data in Azure Cosmos DB using the SQL API.
+Document the querying process and include examples.",
+18,Advanced Data Transformation in Azure Databricks,"Create a Databricks notebook to perform advanced data transformations and machine learning tasks.
+Document the notebook and include examples.",
+19,Orchestrating Data Pipelines with Azure Data Factory,"Create a complex Azure Data Factory pipeline to orchestrate multiple data ingestion and transformation tasks.
+Document the pipeline setup and include screenshots.",
+20,Real-time Data Processing with Azure Event Hubs and Stream Analytics,"Write a script to set up Azure Event Hubs for real-time data ingestion and process the data using Azure Stream Analytics.
+Document the setup process and include the script.",
+21,Integrating Azure Logic Apps with Data Pipelines,"Create an Azure Logic App to automate data pipeline triggers and notifications.
+Document the setup process and include screenshots.",
+22,Setting Up Azure Machine Learning Workspace,"Write a script to create an Azure Machine Learning workspace.
+Document the setup process and include the script.",
+23,Training and Deploying Models with Azure Machine Learning,"Create a notebook to train and deploy a machine learning model using Azure Machine Learning.
+Document the notebook and include examples.",
+24,Monitoring Data Pipelines with Azure Monitor,"Write a script to set up monitoring for your data pipelines using Azure Monitor.
+Document the setup process and include the script.",
+25,Implementing Data Governance with Azure Purview,"Write a script to set up Azure Purview for data governance and cataloging.
+Document the setup process and include the script.",
+26,Securing Data with Azure Key Vault,"Write a script to secure sensitive data in Azure Key Vault.
+Document the setup process and include the script.",
+27,Optimizing Performance with Azure Synapse Analytics,"Write a notebook to perform data analytics and optimization tasks using Azure Synapse Analytics.
+Document the notebook and include examples.",
+28,End-to-End Data Pipeline Demo,"Create a comprehensive demo showcasing an end-to-end data pipeline from ingestion to transformation, processing, and visualization.
+Document the entire process and include all relevant scripts and notebooks.",
+29,Final Review and Documentation,"Review all entries for consistency and completeness.
+Update documentation as needed to ensure clarity and usability.",
+30,Project Showcase and Summary,"Create a final entry summarizing the projects completed over the 30 days.
+Highlight key learnings and accomplishments.
+Share the repository on social media and relevant professional networks.",

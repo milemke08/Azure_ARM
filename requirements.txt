@@ -9,3 +9,5 @@ azure-functions
 azure-mgmt-sql
 pyodbc
 pandas
+databricks-cli
+pyspark

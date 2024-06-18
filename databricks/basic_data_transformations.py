@@ -8,12 +8,14 @@ import os
 spark = SparkSession.builder.appName("AzureDataLakeTransformations").getOrCreate()
 
 # Define Azure Data Lake credentials
-tenant_id = os.getenv('TENANT_ID')
-client_id = os.getenv('CLIENT_ID')
-client_secret = os.getenv('CLIENT_SECRET')
-storage_account_name = "mystrgeactazsdk2adlsv2"
-container_name = "databricks-container-dev"
+tenant_id = "<your-tenant-id>"
+client_id = "<your-client-id>"
+client_secret = "<your-client-secret>"
+storage_account_name = "<your-storage-name>"
+storage_account_key = "<your-storage-key>"
+container_name = "<your-container-name>"
 
+spark.conf.set("fs.azure.account.key.{}.dfs.core.windows.net".format(storage_account_name), storage_account_key)
 # Initialize ClientSecretCredential
 credential = ClientSecretCredential(tenant_id, client_id, client_secret)
 
@@ -22,6 +24,7 @@ service_client = DataLakeServiceClient(account_url=f"https://{storage_account_na
 
 # Function to read data from Azure Data Lake
 def read_data_from_adls(path):
+    print(f"abfss://{container_name}@{storage_account_name}.dfs.core.windows.net/{path}")
     try:
         df = spark.read.csv(f"abfss://{container_name}@{storage_account_name}.dfs.core.windows.net/{path}", header=True, inferSchema=True)
         return df

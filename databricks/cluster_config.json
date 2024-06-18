@@ -1,5 +1,5 @@
 {
-    "cluster_name": "my-cluster",
+    "cluster_name": "az-dev-cluster",
     "spark_version": "15.2.x-scala2.12",
     "node_type_id": "Standard_D3_v2",
     "autotermination_minutes": 20,

@@ -1,0 +1,52 @@
+{
+    "subscription_id": "${SUBSCRIPTION_ID}",
+    "resource_group": "${RESOURCE_GROUP}",
+    "job_name": "${JOB_NAME}",
+    "location": "${LOCATION}",
+    "input_name": "${INPUT_NAME}",
+    "output_name": "${OUTPUT_NAME}",
+    "stream_input_properties": {
+        "datasource": {
+            "type": "Microsoft.Storage/Blob",
+            "properties": {
+                "storageAccounts": [
+                    {
+                        "accountName": "${STORAGE_ACCOUNT_NAME}",
+                        "accountKey": "${STORAGE_ACCOUNT_KEY}"
+                    }
+                ],
+                "container": "${CONTAINER}",
+                "pathPattern": "${PATH_PATTERN}",
+                "dateFormat": "${DATE_FORMAT}",
+                "timeFormat": "${TIME_FORMAT}"
+            }
+        },
+        "serialization": {
+            "type": "Json",
+            "properties": {
+                "encoding": "UTF8"
+            }
+        }
+    },
+    "output_properties": {
+        "datasource": {
+            "type": "Microsoft.Storage/Blob",
+            "properties": {
+                "storageAccounts": [
+                    {
+                        "accountName": "${STORAGE_ACCOUNT_NAME}",
+                        "accountKey": "${STORAGE_ACCOUNT_KEY}"
+                    }
+                ],
+                "container": "${OUTPUT_CONTAINER}",
+                "pathPattern": "${OUTPUT_PATH_PATTERN}"
+            }
+        },
+        "serialization": {
+            "type": "Json",
+            "properties": {
+                "encoding": "UTF8"
+            }
+        }
+    }
+}

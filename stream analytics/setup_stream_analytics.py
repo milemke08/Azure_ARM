@@ -61,18 +61,19 @@ def add_input_to_job():
         logger.info("Adding input to Stream Analytics job...")
         input_properties = Input(
             properties={
+                "type": "Stream",
                 "datasource": BlobStreamInputDataSource(
                     storage_accounts=[{
-                        "account_name": config["stream_input_properties"]["datasource"]["storageAccounts"][0]["accountName"],
-                        "account_key": config["stream_input_properties"]["datasource"]["storageAccounts"][0]["accountKey"]
+                        "account_name": config["stream_input_properties"]["datasource"]["properties"]["storageAccounts"][0]["accountName"],
+                        "account_key": config["stream_input_properties"]["datasource"]["properties"]["storageAccounts"][0]["accountKey"]
                     }],
-                    container=config["stream_input_properties"]["datasource"]["container"],
-                    path_pattern=config["stream_input_properties"]["datasource"]["pathPattern"],
-                    date_format=config["stream_input_properties"]["datasource"]["dateFormat"],
-                    time_format=config["stream_input_properties"]["datasource"]["timeFormat"]
+                    container=config["stream_input_properties"]["datasource"]["properties"]["container"],
+                    path_pattern=config["stream_input_properties"]["datasource"]["properties"]["pathPattern"],
+                    date_format=config["stream_input_properties"]["datasource"]["properties"]["dateFormat"],
+                    time_format=config["stream_input_properties"]["datasource"]["properties"]["timeFormat"]
                 ),
                 "serialization": JsonSerialization(
-                    encoding=config["stream_input_properties"]["serialization"]["encoding"]
+                    encoding=config["stream_input_properties"]["serialization"]["properties"]["encoding"]
                 )
             }
         )

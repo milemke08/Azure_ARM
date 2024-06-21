@@ -12,3 +12,4 @@ pandas
 databricks-cli
 pyspark
 azure-mgmt-streamanalytics
+azureml-opendatasets

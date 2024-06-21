@@ -1,18 +1,10 @@
 from azureml.opendatasets import NycTlcYellow
-from pyspark.sql.functions import col
+from dateutil import parser
 
-# Create a DataFrame from the Open Dataset
-nyc_tlc = NycTlcYellow()
-df = nyc_tlc.to_spark_dataframe()
+end_date = parser.parse('2018-06-06')
+start_date = parser.parse('2018-05-01')
+nyc_tlc = NycTlcYellow(start_date=start_date, end_date=end_date)
+nyc_tlc_df = nyc_tlc.to_pandas_dataframe()
+nyc_tlc_df = spark.createDataFrame(nyc_tlc_df)
 
-# Select a subset of columns and data
-df = df.select(
-    col("tpep_pickup_datetime"),
-    col("tpep_dropoff_datetime"),
-    col("passenger_count"),
-    col("trip_distance"),
-    col("fare_amount")
-).filter(col("tpep_pickup_datetime") > '2021-01-01')
-
-# Write the DataFrame to a Synapse SQL table
-df.write.mode("overwrite").saveAsTable("TestDatabase.NycTlcYellow")
+nyc_tlc_df.write.mode("overwrite").saveAsTable("TestDatabase.NycTlcYellow")

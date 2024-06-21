@@ -77,6 +77,7 @@ def add_input_to_job():
                 )
             }
         )
+        print(input_properties)
         client.inputs.create_or_replace(
             resource_group_name=config["resource_group"],
             job_name=config["job_name"],
@@ -92,20 +93,22 @@ def add_output_to_job():
     try:
         logger.info("Adding output to Stream Analytics job...")
         output_properties = Output(
-            properties={
-                "datasource": BlobOutputDataSource(
+            name=config["output_name"],
+            # properties={
+                datasource= BlobOutputDataSource(
                     storage_accounts=[{
-                        "account_name": config["output_properties"]["datasource"]["storageAccounts"][0]["accountName"],
-                        "account_key": config["output_properties"]["datasource"]["storageAccounts"][0]["accountKey"]
+                        "account_name": config["output_properties"]["datasource"]["properties"]["storageAccounts"][0]["accountName"],
+                        "account_key": config["output_properties"]["datasource"]["properties"]["storageAccounts"][0]["accountKey"]
                     }],
-                    container=config["output_properties"]["datasource"]["container"],
-                    path_pattern=config["output_properties"]["datasource"]["pathPattern"]
+                    container=config["output_properties"]["datasource"]["properties"]["container"],
+                    path_pattern=config["output_properties"]["datasource"]["properties"]["pathPattern"]
                 ),
-                "serialization": JsonSerialization(
-                    encoding=config["output_properties"]["serialization"]["encoding"]
+                serialization=JsonSerialization(
+                    encoding=config["output_properties"]["serialization"]["properties"]["encoding"]
                 )
-            }
+            # }
         )
+        print(output_properties)
         client.outputs.create_or_replace(
             resource_group_name=config["resource_group"],
             job_name=config["job_name"],

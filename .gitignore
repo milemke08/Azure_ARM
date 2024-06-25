@@ -14,3 +14,6 @@ __pycache__/
 
 # dotenv environment variables file
 .env
+
+#Azure resource list
+AzureResources.json

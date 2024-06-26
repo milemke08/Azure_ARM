@@ -1,7 +1,7 @@
 # Ensure the Az module is imported
 Import-Module Az
 
-# Ask for the resource group name
+# Prompt for the resource group name
 $resourceGroupName = Read-Host -Prompt "Enter the name of the Azure resource group to delete"
 
 # Confirm the deletion
@@ -10,7 +10,7 @@ $confirmation = Read-Host -Prompt "Are you sure you want to delete the resource 
 if ($confirmation -eq "yes") {
     try {
         # Connect to Azure
-        Connect-AzAccount
+        Connect-AzAccount -TenantId <your-tenant-id>
 
         # Delete the resource group
         Remove-AzResourceGroup -Name $resourceGroupName -Force -ErrorAction Stop
@@ -22,3 +22,7 @@ if ($confirmation -eq "yes") {
 } else {
     Write-Output "Operation cancelled. The resource group '$resourceGroupName' was not deleted."
 }
+
+# Pause to keep the console open
+Write-Host "Press any key to exit..."
+[System.Console]::ReadKey() | Out-Null

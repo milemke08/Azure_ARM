@@ -21,7 +21,7 @@ function import-DotEnv {
 # Load the .env file (assumed to be in the parent directory of the script)
 $scriptDir = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
 $envFilePath = Join-Path -Path $scriptDir -ChildPath "..\.env"
-Load-DotEnv -path $envFilePath
+import-DotEnv -path $envFilePath
 
 # Get the tenant ID and subscription ID from environment variables
 $tenantId = [System.Environment]::GetEnvironmentVariable("TENANT_ID")

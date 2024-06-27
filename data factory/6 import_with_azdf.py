@@ -38,6 +38,24 @@ def create_blob_storage_linked_service(subscription_id, resource_group_name, dat
     except Exception as e:
         print(f"An error occurred: {str(e)}")
 
+def create_sql_db_linked_service(subscription_id, resource_group_name, data_factory_name, linked_service_name, sql_server_name, db_name, user, password):
+    try:
+        # Set up Azure credentials and clients
+        credential = DefaultAzureCredential()
+        adf_client = DataFactoryManagementClient(credential, subscription_id)
+
+        # Create a linked service to Azure Blob Storage
+        linked_service = LinkedServiceResource(properties=AzureSqlDatabaseLinkedService(
+            # connection_string=f"DefaultEndpointsProtocol=https;AccountName={storage_account_name};AccountKey={storage_account_key};EndpointSuffix=core.windows.net"
+            connection_string=f"Server=tcp:{sql_server_name}.database.windows.net,1433;Initial Catalog={db_name};User ID={user};Password={password};Encrypt=true;Connection Timeout=30;"
+        ))
+        adf_client.linked_services.create_or_update(resource_group_name, data_factory_name, linked_service_name, linked_service)
+
+        print(f"Linked service '{linked_service_name}' created successfully in Data Factory '{data_factory_name}'.")
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
 
 def create_data_factory_pipeline(subscription_id, resource_group_name, data_factory_name, blob_storage_linked_service, data_lake_linked_service, blob_container, blob_path, data_lake_file_system, data_lake_directory):
     try:
@@ -100,6 +118,7 @@ if __name__ == "__main__":
     resource_group_name = os.getenv('RESOURCE_GROUP_NAME')  # Replace with your resource group name
     data_factory_name = os.getenv('DATA_FACTORY_NAME')  # Replace with your Data Factory name
     location = os.getenv('LOCATION')  # Replace with your location, e.g., 'eastus'
+    
     data_lake_linked_service  = os.getenv('DATA_LAKE_LINKED_SERVICE')  # Replace with your linked service name
     storage_account_name = os.getenv('STORAGE_ACCOUNT_NAME') # Replace with your storage account name
     storage_account_key = os.getenv('STORAGE_ACCOUNT_KEY')  # Replace with your storage account key
@@ -108,16 +127,23 @@ if __name__ == "__main__":
     blob_storage_account_name = os.getenv('BLOB_STORAGE_ACCOUNT_NAME')  # Replace with your storage account name
     blob_storage_account_key = os.getenv('BLOB_STORAGE_ACCOUNT_KEY')  # Replace with your storage account key
 
-    blob_container = os.getenv('BLOB_CONTAINER')  # Replace with your Blob container name
-    blob_path = os.getenv('BLOB_PATH')  # Replace with your Blob file path
-    data_lake_file_system = os.getenv('DATA_LAKE_FILE_SYSTEM')  # Replace with your Data Lake file system name
-    data_lake_directory = os.getenv('DATA_LAKE_DIRECTORY')  # Replace with your Data Lake directory
+    sql_server = os.getenv('SQL_SERVER_NAME') 
+    sql_db = os.getenv('SQL_DATABASE_NAME') 
+    sql_user = os.getenv('ADMIN_USER') 
+    sql_password = os.getenv('ADMIN_PASSWORD') 
+    sql_linked_service_name = os.getenv('SQL_LINKED_SERVICE')
+
+    # blob_container = os.getenv('BLOB_CONTAINER')  # Replace with your Blob container name
+    # blob_path = os.getenv('BLOB_PATH')  # Replace with your Blob file path
+    # data_lake_file_system = os.getenv('DATA_LAKE_FILE_SYSTEM')  # Replace with your Data Lake file system name
+    # data_lake_directory = os.getenv('DATA_LAKE_DIRECTORY')  # Replace with your Data Lake directory
 
     create_data_factory(subscription_id, resource_group_name, data_factory_name, location)
 
     create_blob_storage_linked_service(subscription_id, resource_group_name, data_factory_name, data_lake_linked_service , storage_account_name, storage_account_key)
-    create_blob_storage_linked_service(subscription_id, resource_group_name, data_factory_name, blob_storage_linked_service_name, blob_storage_account_name, blob_storage_account_key)
+    # (subscription_id, resource_group_name, data_factory_name, linked_service_name, sql_server_name, db_name, user, password):
+    create_sql_db_linked_service(subscription_id, resource_group_name, data_factory_name, sql_linked_service_name, sql_server, sql_db, sql_user, sql_password)
 
-    create_data_factory_pipeline(subscription_id, resource_group_name, data_factory_name, blob_storage_linked_service_name, data_lake_linked_service, blob_container, blob_path, data_lake_file_system, data_lake_directory)
+    # create_data_factory_pipeline(subscription_id, resource_group_name, data_factory_name, blob_storage_linked_service_name, data_lake_linked_service, blob_container, blob_path, data_lake_file_system, data_lake_directory)
 
-    run_pipeline(resource_group_name,data_factory_name,'BlobToDataLakePipeline')
+    # run_pipeline(resource_group_name,data_factory_name,'BlobToDataLakePipeline')

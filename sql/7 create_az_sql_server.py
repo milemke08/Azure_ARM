@@ -59,7 +59,7 @@ def main():
     sql_client = SqlManagementClient(credential, os.environ["AZURE_SUBSCRIPTION_ID"])
 
     # Create resources
-    create_resource_group(resource_client)
+    # create_resource_group(resource_client)
     create_sql_server(sql_client)
     create_sql_database(sql_client)
 

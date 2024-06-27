@@ -56,42 +56,66 @@ def create_sql_db_linked_service(subscription_id, resource_group_name, data_fact
     except Exception as e:
         print(f"An error occurred: {str(e)}")
 
-
-def create_data_factory_pipeline(subscription_id, resource_group_name, data_factory_name, blob_storage_linked_service, data_lake_linked_service, blob_container, blob_path, data_lake_file_system, data_lake_directory):
+def create_datasets(subscription_id, resource_group_name, data_factory_name, blob_linked_service_name, sql_linked_service_name):
     try:
         # Set up Azure credentials and clients
         credential = DefaultAzureCredential()
         adf_client = DataFactoryManagementClient(credential, subscription_id)
 
-        # Define the linked services
-        linked_service_blob = LinkedServiceReference(reference_name=blob_storage_linked_service, type='LinkedServiceReference')
-        linked_service_adls = LinkedServiceReference(reference_name=data_lake_linked_service, type='LinkedServiceReference')
-
-        # Define the source dataset
-        blob_storage_dataset = DatasetResource(properties=AzureBlobDataset(
-            linked_service_name=linked_service_blob,
-            folder_path=blob_container,
-            file_name=blob_path
+        blob_dataset = DatasetResource(properties=AzureBlobDataset(
+            linked_service_name=LinkedServiceReference(reference_name=blob_linked_service_name, type='LinkedServiceReference'),
+            folder_path='nyctlc/yellow/puYear=2019/puMonth=12',
+            format=TextFormat(column_delimiter=',')
         ))
 
-        # Define the sink dataset
-        adls_dataset = DatasetResource(properties=AzureDataLakeStoreDataset(
-            linked_service_name=linked_service_adls,
-            folder_path=f"{data_lake_file_system}/{data_lake_directory}",
-            file_name=blob_path.split('/')[-1]  # Assuming you want to keep the same file name
+        sql_dataset = DatasetResource(properties=AzureSqlTableDataset(
+            linked_service_name=LinkedServiceReference(reference_name=sql_linked_service_name, type='LinkedServiceReference'),
+            table_name='YellowTaxiData'
         ))
 
-        # Create datasets in the Data Factory
-        adf_client.datasets.create_or_update(resource_group_name, data_factory_name, 'BlobStorageDataset', blob_storage_dataset)
-        adf_client.datasets.create_or_update(resource_group_name, data_factory_name, 'DataLakeStorageDataset', adls_dataset)
+        adf_client.datasets.create_or_update(resource_group_name, data_factory_name, 'BlobDataset', blob_dataset)
+        print(f"dataset created successfully in Data Factory '{data_factory_name}'.")
+        adf_client.datasets.create_or_update(resource_group_name, data_factory_name, 'SqlDataset', sql_dataset)
+        print(f"dataset created successfully in Data Factory '{data_factory_name}'.")
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
+def create_data_factory_pipeline(subscription_id, resource_group_name, data_factory_name):
+    try:
+        # Set up Azure credentials and clients
+        credential = DefaultAzureCredential()
+        adf_client = DataFactoryManagementClient(credential, subscription_id)
+
+        # # Define the linked services
+        # linked_service_blob = LinkedServiceReference(reference_name=blob_storage_linked_service, type='LinkedServiceReference')
+        # linked_service_adls = LinkedServiceReference(reference_name=data_lake_linked_service, type='LinkedServiceReference')
+
+        # # Define the source dataset
+        # blob_storage_dataset = DatasetResource(properties=AzureBlobDataset(
+        #     linked_service_name=linked_service_blob,
+        #     folder_path=blob_container,
+        #     file_name=blob_path
+        # ))
+
+        # # Define the sink dataset
+        # adls_dataset = DatasetResource(properties=AzureDataLakeStoreDataset(
+        #     linked_service_name=linked_service_adls,
+        #     folder_path=f"{data_lake_file_system}/{data_lake_directory}",
+        #     file_name=blob_path.split('/')[-1]  # Assuming you want to keep the same file name
+        # ))
+
+        # # Create datasets in the Data Factory
+        # adf_client.datasets.create_or_update(resource_group_name, data_factory_name, 'BlobStorageDataset', blob_storage_dataset)
+        # adf_client.datasets.create_or_update(resource_group_name, data_factory_name, 'DataLakeStorageDataset', adls_dataset)
 
         # Create the Copy Activity
         copy_activity = CopyActivity(
-            name='CopyFromBlobToDataLake',
-            inputs=[DatasetReference(reference_name='BlobStorageDataset', type='DatasetReference')],
-            outputs=[DatasetReference(reference_name='DataLakeStorageDataset', type='DatasetReference')],
+            name='CopyBlobToSqlYellowTaxi',
+            inputs=[DatasetReference(reference_name='BlobDataset', type='DatasetReference')],
+            outputs=[DatasetReference(reference_name='SqlDataset', type='DatasetReference')],
             source=BlobSource(),
-            sink=AzureDataLakeStoreSink()
+            sink=SqlSink()
         )
 
         # Create the pipeline with the Copy Activity
@@ -123,7 +147,7 @@ if __name__ == "__main__":
     storage_account_name = os.getenv('STORAGE_ACCOUNT_NAME') # Replace with your storage account name
     storage_account_key = os.getenv('STORAGE_ACCOUNT_KEY')  # Replace with your storage account key
 
-    blob_storage_linked_service_name = os.getenv('BLOB_STORAGE_LINKED_SERVICE_NAME')  # Replace with your linked service name
+    blob_storage_linked_service_name = os.getenv('DATA_LAKE_LINKED_SERVICE')  # Replace with your linked service name
     blob_storage_account_name = os.getenv('BLOB_STORAGE_ACCOUNT_NAME')  # Replace with your storage account name
     blob_storage_account_key = os.getenv('BLOB_STORAGE_ACCOUNT_KEY')  # Replace with your storage account key
 
@@ -138,12 +162,14 @@ if __name__ == "__main__":
     # data_lake_file_system = os.getenv('DATA_LAKE_FILE_SYSTEM')  # Replace with your Data Lake file system name
     # data_lake_directory = os.getenv('DATA_LAKE_DIRECTORY')  # Replace with your Data Lake directory
 
-    create_data_factory(subscription_id, resource_group_name, data_factory_name, location)
+    # create_data_factory(subscription_id, resource_group_name, data_factory_name, location)
 
-    create_blob_storage_linked_service(subscription_id, resource_group_name, data_factory_name, data_lake_linked_service , storage_account_name, storage_account_key)
-    # (subscription_id, resource_group_name, data_factory_name, linked_service_name, sql_server_name, db_name, user, password):
-    create_sql_db_linked_service(subscription_id, resource_group_name, data_factory_name, sql_linked_service_name, sql_server, sql_db, sql_user, sql_password)
+    # create_blob_storage_linked_service(subscription_id, resource_group_name, data_factory_name, data_lake_linked_service , storage_account_name, storage_account_key)
+    
+    # create_sql_db_linked_service(subscription_id, resource_group_name, data_factory_name, sql_linked_service_name, sql_server, sql_db, sql_user, sql_password)
 
-    # create_data_factory_pipeline(subscription_id, resource_group_name, data_factory_name, blob_storage_linked_service_name, data_lake_linked_service, blob_container, blob_path, data_lake_file_system, data_lake_directory)
+    create_datasets(subscription_id, resource_group_name, data_factory_name, blob_storage_linked_service_name, sql_linked_service_name)
 
-    # run_pipeline(resource_group_name,data_factory_name,'BlobToDataLakePipeline')
+    create_data_factory_pipeline(subscription_id, resource_group_name, data_factory_name)
+
+    run_pipeline(resource_group_name,data_factory_name,'BlobToDataLakePipeline')

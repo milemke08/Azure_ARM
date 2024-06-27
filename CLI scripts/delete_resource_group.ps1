@@ -2,7 +2,7 @@
 Import-Module Az
 
 # Function to load environment variables from .env file
-function Load-DotEnv {
+function import-DotEnv {
     param (
         [string]$path
     )

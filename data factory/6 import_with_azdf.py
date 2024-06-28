@@ -162,11 +162,11 @@ if __name__ == "__main__":
     # data_lake_file_system = os.getenv('DATA_LAKE_FILE_SYSTEM')  # Replace with your Data Lake file system name
     # data_lake_directory = os.getenv('DATA_LAKE_DIRECTORY')  # Replace with your Data Lake directory
 
-    # create_data_factory(subscription_id, resource_group_name, data_factory_name, location)
+    create_data_factory(subscription_id, resource_group_name, data_factory_name, location)
 
-    # create_blob_storage_linked_service(subscription_id, resource_group_name, data_factory_name, data_lake_linked_service , storage_account_name, storage_account_key)
+    create_blob_storage_linked_service(subscription_id, resource_group_name, data_factory_name, data_lake_linked_service , storage_account_name, storage_account_key)
     
-    # create_sql_db_linked_service(subscription_id, resource_group_name, data_factory_name, sql_linked_service_name, sql_server, sql_db, sql_user, sql_password)
+    create_sql_db_linked_service(subscription_id, resource_group_name, data_factory_name, sql_linked_service_name, sql_server, sql_db, sql_user, sql_password)
 
     create_datasets(subscription_id, resource_group_name, data_factory_name, blob_storage_linked_service_name, sql_linked_service_name)
 

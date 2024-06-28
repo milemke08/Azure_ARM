@@ -46,7 +46,7 @@ location = 'East US'
 
 # Replace with the IP ranges for your Data Factory region
 $ipRanges = @(
-    "20.42.2.0/23",
+    "20.42.2.0/23", #this is active
     "20.42.4.0/26",
     "20.42.64.0/28",
     "20.49.111.0/29",

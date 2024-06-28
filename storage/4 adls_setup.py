@@ -7,7 +7,7 @@ from azure.mgmt.storage.models import StorageAccountCreateParameters
 
 def main():
     try:
-        load_dotenv()
+        
         # Set up Azure credentials and clients
         credential = DefaultAzureCredential()
         subscription_id = os.getenv('AZURE_SUBSCRIPTION_ID')
@@ -40,4 +40,5 @@ def main():
         print(f"An error occurred: {str(e)}")
 
 if __name__ == "__main__":
+    load_dotenv()
     main()

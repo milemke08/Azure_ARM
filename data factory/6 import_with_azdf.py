@@ -6,6 +6,9 @@ from azure.mgmt.storage import StorageManagementClient
 import os
 from dotenv import load_dotenv
 
+#use this to create linked service and connection to yellow taxi data: https://learn.microsoft.com/en-us/azure/open-datasets/dataset-taxi-yellow?tabs=pyspark
+#first stage the data in blob storage, then load into sql
+
 def create_data_factory(subscription_id, resource_group_name, data_factory_name, location):
     try:
         # Set up Azure credentials and clients

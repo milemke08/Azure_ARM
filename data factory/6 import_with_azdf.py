@@ -31,9 +31,16 @@ def create_blob_storage_linked_service(subscription_id, resource_group_name, dat
         adf_client = DataFactoryManagementClient(credential, subscription_id)
 
         # Create a linked service to Azure Blob Storage
-        linked_service = LinkedServiceResource(properties=AzureBlobStorageLinkedService(
-            connection_string=f"DefaultEndpointsProtocol=https;AccountName={storage_account_name};AccountKey={storage_account_key};EndpointSuffix=core.windows.net"
-        ))
+        if storage_account_key != 0:
+            linked_service = LinkedServiceResource(properties=AzureBlobStorageLinkedService(
+                connection_string=f"DefaultEndpointsProtocol=https; \
+                                    AccountName={storage_account_name}; \
+                                    AccountKey={storage_account_key}; \
+                                    EndpointSuffix=core.windows.net"))
+        else:
+            linked_service = LinkedServiceResource(properties=AzureBlobStorageLinkedService(
+                connection_string="BlobEndpoint=https://azureopendatastorage.blob.core.windows.net/nyctlc;SharedAccessSignature="))
+            
         adf_client.linked_services.create_or_update(resource_group_name, data_factory_name, linked_service_name, linked_service)
 
         print(f"Linked service '{linked_service_name}' created successfully in Data Factory '{data_factory_name}'.")
@@ -168,6 +175,8 @@ if __name__ == "__main__":
     create_data_factory(subscription_id, resource_group_name, data_factory_name, location)
 
     create_blob_storage_linked_service(subscription_id, resource_group_name, data_factory_name, data_lake_linked_service , storage_account_name, storage_account_key)
+
+    create_blob_storage_linked_service(subscription_id, resource_group_name, data_factory_name, "YellowTaxiLS" , storage_account_name, 0)
     
     create_sql_db_linked_service(subscription_id, resource_group_name, data_factory_name, sql_linked_service_name, sql_server, sql_db, sql_user, sql_password)
 

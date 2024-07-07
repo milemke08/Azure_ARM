@@ -33,10 +33,7 @@ def create_blob_storage_linked_service(subscription_id, resource_group_name, dat
         # Create a linked service to Azure Blob Storage
         if storage_account_key != 0:
             linked_service = LinkedServiceResource(properties=AzureBlobStorageLinkedService(
-                connection_string=f"DefaultEndpointsProtocol=https; \
-                                    AccountName={storage_account_name}; \
-                                    AccountKey={storage_account_key}; \
-                                    EndpointSuffix=core.windows.net"))
+                connection_string=f"DefaultEndpointsProtocol=https;AccountName={storage_account_name};AccountKey={storage_account_key};EndpointSuffix=core.windows.net"))
         else:
             linked_service = LinkedServiceResource(properties=AzureBlobStorageLinkedService(
                 connection_string="BlobEndpoint=https://azureopendatastorage.blob.core.windows.net/nyctlc;SharedAccessSignature="))

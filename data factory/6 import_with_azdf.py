@@ -36,7 +36,7 @@ def create_blob_storage_linked_service(subscription_id, resource_group_name, dat
                 connection_string=f"DefaultEndpointsProtocol=https;AccountName={storage_account_name};AccountKey={storage_account_key};EndpointSuffix=core.windows.net"))
         else:
             linked_service = LinkedServiceResource(properties=AzureBlobStorageLinkedService(
-                connection_string="BlobEndpoint=https://azureopendatastorage.blob.core.windows.net/nyctlc;SharedAccessSignature="))
+                connection_string="BlobEndpoint=https://azureopendatastorage.blob.core.windows.net/nyctlc"))
             
         adf_client.linked_services.create_or_update(resource_group_name, data_factory_name, linked_service_name, linked_service)
 
@@ -75,6 +75,12 @@ def create_datasets(subscription_id, resource_group_name, data_factory_name, blo
             format=TextFormat(column_delimiter=',')
         ))
 
+        yt_blob_dataset = DatasetResource(properties=AzureBlobDataset(
+            linked_service_name=LinkedServiceReference(reference_name="YellowTaxiLS", type='LinkedServiceReference'),
+            folder_path='nyctlc/yellow/puYear=2019/puMonth=12',
+            format=TextFormat(column_delimiter=',')
+        ))
+
         sql_dataset = DatasetResource(properties=AzureSqlTableDataset(
             linked_service_name=LinkedServiceReference(reference_name=sql_linked_service_name, type='LinkedServiceReference'),
             table_name='YellowTaxiData'
@@ -83,6 +89,8 @@ def create_datasets(subscription_id, resource_group_name, data_factory_name, blo
         adf_client.datasets.create_or_update(resource_group_name, data_factory_name, 'BlobDataset', blob_dataset)
         print(f"dataset created successfully in Data Factory '{data_factory_name}'.")
         adf_client.datasets.create_or_update(resource_group_name, data_factory_name, 'SqlDataset', sql_dataset)
+        print(f"dataset created successfully in Data Factory '{data_factory_name}'.")
+        adf_client.datasets.create_or_update(resource_group_name, data_factory_name, 'BlobDatasetYT', yt_blob_dataset)
         print(f"dataset created successfully in Data Factory '{data_factory_name}'.")
 
     except Exception as e:

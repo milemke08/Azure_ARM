@@ -127,10 +127,10 @@ def create_data_factory_pipeline(subscription_id, resource_group_name, data_fact
         # Create the Copy Activity
         copy_activity = CopyActivity(
             name='CopyBlobToSqlYellowTaxi',
-            inputs=[DatasetReference(reference_name='BlobDataset', type='DatasetReference')],
-            outputs=[DatasetReference(reference_name='SqlDataset', type='DatasetReference')],
+            inputs=[DatasetReference(reference_name='BlobDatasetYT', type='DatasetReference')],
+            outputs=[DatasetReference(reference_name='BlobDataset', type='DatasetReference')],
             source=BlobSource(),
-            sink=SqlSink()
+            sink=BlobSink()
         )
 
         # Create the pipeline with the Copy Activity

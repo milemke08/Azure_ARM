@@ -1,5 +1,9 @@
-# Ensure the Az module is imported
-Import-Module Az
+# # Ensure the Az module is imported
+# Import-Module Az
+
+# Ensure the required Az modules are imported
+Import-Module Az.Accounts
+Import-Module Az.Resources
 
 # Function to load environment variables from .env file
 function Import-DotEnv {

@@ -1,6 +1,11 @@
 # Ensure the Az module is loaded
 Import-Module Az
 
+# # Ensure the required Az modules are imported
+# Import-Module Az.Accounts
+# Import-Module Az.Resources
+
+
 # Array to hold the data
 $data = @()
 

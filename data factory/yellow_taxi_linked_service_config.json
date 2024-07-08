@@ -1,0 +1,12 @@
+{
+    "name": "YellowTaxiLS",
+    "properties": {
+        "annotations": [],
+        "type": "AzureBlobStorage",
+        "typeProperties": {
+            "containerUri": "https://azureopendatastorage.blob.core.windows.net/nyctlc",
+            "authenticationType": "Anonymous"
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/linkedservices"
+}

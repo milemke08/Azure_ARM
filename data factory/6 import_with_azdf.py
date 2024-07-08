@@ -4,6 +4,7 @@ from azure.mgmt.datafactory.models import Factory
 from azure.mgmt.datafactory.models import *
 from azure.mgmt.storage import StorageManagementClient
 import os
+import json
 from dotenv import load_dotenv
 
 #use this to create linked service and connection to yellow taxi data: https://learn.microsoft.com/en-us/azure/open-datasets/dataset-taxi-yellow?tabs=pyspark
@@ -35,8 +36,11 @@ def create_blob_storage_linked_service(subscription_id, resource_group_name, dat
             linked_service = LinkedServiceResource(properties=AzureBlobStorageLinkedService(
                 connection_string=f"DefaultEndpointsProtocol=https;AccountName={storage_account_name};AccountKey={storage_account_key};EndpointSuffix=core.windows.net"))
         else:
-            linked_service = LinkedServiceResource(properties=AzureBlobStorageLinkedService(
-                connection_string="BlobEndpoint=https://azureopendatastorage.blob.core.windows.net/nyctlc"))
+            with open('yellow_taxi_linked_service_config.json', 'r') as json_file:
+                linked_service_config = json.load(json_file)
+            linked_service = LinkedServiceResource(properties=linked_service_config['properties'])
+            # linked_service = LinkedServiceResource(properties=AzureBlobStorageLinkedService(
+            #     connection_string="BlobEndpoint=https://azureopendatastorage.blob.core.windows.net/nyctlc"))
             
         adf_client.linked_services.create_or_update(resource_group_name, data_factory_name, linked_service_name, linked_service)
 
@@ -153,6 +157,7 @@ def run_pipeline(resource_group_name, data_factory_name, pipeline_name):
 
 if __name__ == "__main__":
     load_dotenv()
+
     subscription_id = os.getenv('AZURE_SUBSCRIPTION_ID')  # Replace with your Azure subscription ID 
     resource_group_name = os.getenv('RESOURCE_GROUP_NAME')  # Replace with your resource group name
     data_factory_name = os.getenv('DATA_FACTORY_NAME')  # Replace with your Data Factory name

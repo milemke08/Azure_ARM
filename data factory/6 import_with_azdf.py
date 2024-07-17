@@ -36,7 +36,8 @@ def create_blob_storage_linked_service(subscription_id, resource_group_name, dat
             linked_service = LinkedServiceResource(properties=AzureBlobStorageLinkedService(
                 connection_string=f"DefaultEndpointsProtocol=https;AccountName={storage_account_name};AccountKey={storage_account_key};EndpointSuffix=core.windows.net"))
         else:
-            with open('yellow_taxi_linked_service_config.json', 'r') as json_file:
+            # C:\Users\zdoi\Documents\Python\Azure\AzureSDK\Azure_SDK\data factory\6 import_with_azdf.py
+            with open(r'data factory\yellow_taxi_linked_service_config.json', 'r') as json_file:
                 linked_service_config = json.load(json_file)
             linked_service = LinkedServiceResource(properties=linked_service_config['properties'])
             # linked_service = LinkedServiceResource(properties=AzureBlobStorageLinkedService(

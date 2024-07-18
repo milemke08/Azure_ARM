@@ -52,6 +52,7 @@ def create_blob_storage_linked_service(subscription_id, resource_group_name, dat
 
 def create_sql_db_linked_service(subscription_id, resource_group_name, data_factory_name, linked_service_name, sql_server_name, db_name, user, password):
     try:
+        
         # Set up Azure credentials and clients
         credential = DefaultAzureCredential()
         adf_client = DataFactoryManagementClient(credential, subscription_id)

@@ -57,11 +57,14 @@ def create_sql_db_linked_service(subscription_id, resource_group_name, data_fact
         credential = DefaultAzureCredential()
         adf_client = DataFactoryManagementClient(credential, subscription_id)
 
+        with open(r'data factory\sql_server_linked_service_config.json', 'r') as json_file:
+                linked_service_config = json.load(json_file)
+        linked_service = LinkedServiceResource(properties=linked_service_config['properties'])
         # Create a linked service to Azure Blob Storage
-        linked_service = LinkedServiceResource(properties=AzureSqlDatabaseLinkedService(
-            # connection_string=f"DefaultEndpointsProtocol=https;AccountName={storage_account_name};AccountKey={storage_account_key};EndpointSuffix=core.windows.net"
-            connection_string=f"Server=tcp:{sql_server_name}.database.windows.net,1433;Initial Catalog={db_name};User ID={user};Password={password};Encrypt=true;Connection Timeout=30;"
-        ))
+        # linked_service = LinkedServiceResource(properties=AzureSqlDatabaseLinkedService(
+        #     # connection_string=f"DefaultEndpointsProtocol=https;AccountName={storage_account_name};AccountKey={storage_account_key};EndpointSuffix=core.windows.net"
+        #     connection_string=f"Server=tcp:{sql_server_name}.database.windows.net,1433;Initial Catalog={db_name};User ID={user};Password={password};Encrypt=true;Connection Timeout=30;"
+        # ))
         adf_client.linked_services.create_or_update(resource_group_name, data_factory_name, linked_service_name, linked_service)
 
         print(f"Linked service '{linked_service_name}' created successfully in Data Factory '{data_factory_name}'.")

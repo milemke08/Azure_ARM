@@ -134,7 +134,7 @@ def create_data_factory_pipeline(subscription_id, resource_group_name, data_fact
         # adf_client.datasets.create_or_update(resource_group_name, data_factory_name, 'DataLakeStorageDataset', adls_dataset)
 
         # Create the Copy Activity
-        copy_activity = CopyActivity(
+        copy_activity_blob_to_blob = CopyActivity(
             name='CopyBlobToSqlYellowTaxi',
             inputs=[DatasetReference(reference_name='BlobDatasetYT', type='DatasetReference')],
             outputs=[DatasetReference(reference_name='BlobDataset', type='DatasetReference')],
@@ -144,7 +144,7 @@ def create_data_factory_pipeline(subscription_id, resource_group_name, data_fact
 
         # Create the pipeline with the Copy Activity
         pipeline_name = 'BlobToDataLakePipeline'
-        pipeline = PipelineResource(activities=[copy_activity])
+        pipeline = PipelineResource(activities=[copy_activity_blob_to_blob])
         adf_client.pipelines.create_or_update(resource_group_name, data_factory_name, pipeline_name, pipeline)
 
         print(f"Pipeline '{pipeline_name}' created successfully!")

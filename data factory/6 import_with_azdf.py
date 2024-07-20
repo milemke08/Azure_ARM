@@ -91,10 +91,9 @@ def create_datasets(subscription_id, resource_group_name, data_factory_name, blo
         ))
 
         parquet_dataset = DatasetResource(properties=ParquetDataset(
-            linked_service_name=LinkedServiceReference(reference_name=blob_linked_service_name),
+            linked_service_name=LinkedServiceReference(reference_name=blob_linked_service_name, type='LinkedServiceReference'),
             folder_path='nyctlc',
-            file_name='yellow/puYear=2019/puMonth=12/part-00004-tid-8898858832658823408-a1de80bd-eed3-4d11-b9d4-fa74bfbd47bc-426331-133.c000.snappy.parquet'
-))
+            file_name='yellow/puYear=2019/puMonth=12/part-00004-tid-8898858832658823408-a1de80bd-eed3-4d11-b9d4-fa74bfbd47bc-426331-133.c000.snappy.parquet'))
 
         sql_dataset = DatasetResource(properties=AzureSqlTableDataset(
             linked_service_name=LinkedServiceReference(reference_name=sql_linked_service_name, type='LinkedServiceReference'),

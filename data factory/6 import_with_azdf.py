@@ -152,7 +152,7 @@ def create_data_factory_pipeline(subscription_id, resource_group_name, data_fact
         # Create the Copy Activity - Blob to SQL
         copy_activity_blob_to_sql = CopyActivity(
             name='CopySqlYellowTaxiBlobtoSQL',
-            inputs=[DatasetReference(reference_name='BlobDataset', type='DatasetReference')],
+            inputs=[DatasetReference(reference_name='ParquetDataset', type='DatasetReference')],
             outputs=[DatasetReference(reference_name='SqlDataset', type='DatasetReference')],
             source=ParquetSource(),
             sink=SqlSink()

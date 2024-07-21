@@ -3,6 +3,7 @@ from azure.identity import DefaultAzureCredential
 import urllib
 from dotenv import load_dotenv
 import os
+import sys
 load_dotenv()
 
 server = os.getenv('SQL_SERVER_NAME')

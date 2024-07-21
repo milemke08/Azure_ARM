@@ -2,8 +2,9 @@ import pyodbc
 from azure.identity import DefaultAzureCredential
 import urllib
 from dotenv import load_dotenv
-# Define connection parameters
+import os
 load_dotenv()
+
 server = os.getenv('SQL_SERVER_NAME')
 database = os.getenv('SQL_DATABASE_NAME')
 username = os.getenv('ADMIN_USER')

@@ -1,0 +1,43 @@
+{
+    "name": "CopySqlYellowTaxiBlobtoSQL",
+    "type": "Copy",
+    "dependsOn": [],
+    "policy": {
+        "retry": 0,
+        "retryIntervalInSeconds": 30,
+        "secureOutput": false,
+        "secureInput": false
+    },
+    "userProperties": [],
+    "typeProperties": {
+        "source": {
+            "type": "ParquetSource",
+            "storeSettings": {
+                "type": "AzureBlobStorageReadSettings",
+                "recursive": true,
+                "wildcardFolderPath": "yellow/puYear=2019/puMonth=12",
+                "wildcardFileName": "*.parquet",
+                "enablePartitionDiscovery": false
+            },
+            "formatSettings": {
+                "type": "ParquetReadSettings"
+            }
+        },
+        "sink": {
+            "type": "SqlSink"
+        },
+        "enableStaging": false
+    },
+    "inputs": [
+        {
+            "referenceName": "ParquetDataset",
+            "type": "DatasetReference"
+        }
+    ],
+    "outputs": [
+        {
+            "referenceName": "SqlDataset",
+            "type": "DatasetReference"
+        }
+    ]
+}

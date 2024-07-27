@@ -1,7 +1,7 @@
 param (
     [string]$ResourceGroupName = "myResourceGroup",
     [string]$Location = "eastus",
-    [string]$ClusterConfigFilePath = "cluster_config.json",
+    [string]$ClusterConfigFilePath = "databricks\cluster_config.json",
     [string]$EnvFilePath = ".env"
 )
 

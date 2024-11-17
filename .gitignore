@@ -17,3 +17,6 @@ __pycache__/
 
 #Azure resource list
 AzureResources.json
+
+#TTS service detials
+service_details.json

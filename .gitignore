@@ -20,3 +20,10 @@ AzureResources.json
 
 #TTS service detials
 service_details.json
+
+#databricks resource details
+*_resource_details.json
+
+
+# TTS Audio
+*.wav

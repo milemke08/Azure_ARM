@@ -29,6 +29,42 @@ function Update-EnvFile {
     }
 }
 
+function Save-ResourceDetails {
+    param (
+        [string]$ResourceGroupName,
+        [string]$WorkspaceName
+    )
+
+    try {
+        # Retrieve resource details
+        $resourceDetails = az databricks workspace show --name $WorkspaceName --resource-group $ResourceGroupName --output json
+        if ($LASTEXITCODE -ne 0) { throw "Failed to retrieve Databricks workspace details." }
+
+        # Parse JSON to get the resource ID
+        $resourceDetailsObject = $resourceDetails | ConvertFrom-Json
+        $resourceId = $resourceDetailsObject.id
+
+        # Save resource details to a JSON file
+        # Define the full directory path where the file will be saved
+        $directory = "C:\Users\zdoi\Documents\Python\Azure\AzureSDK\Azure_SDK\databricks\"
+        # Define the full file path
+        $fileName = Join-Path -Path $directory -ChildPath "$WorkspaceName`_resource_details.json"
+        # $fileName = "/databricks/$WorkspaceName`_resource_details.json"
+        # $fileName = "$WorkspaceName`_resource_details.json"
+        $outputData = @{
+            ResourceID = $resourceId
+            ResourceDetails = $resourceDetailsObject
+        }
+        $outputData | ConvertTo-Json -Depth 100 | Set-Content -Path $fileName -Encoding utf8
+
+        Write-Host "Resource details saved to file: $fileName" -ForegroundColor Green
+    } catch {
+        Write-Error "Error saving resource details: $_"
+        exit 1
+    }
+}
+
+
 function Create-DatabricksWorkspace {
     param (
         [string]$ResourceGroupName,
@@ -45,6 +81,9 @@ function Create-DatabricksWorkspace {
         # Create databricks workspace
         az databricks workspace create --resource-group $ResourceGroupName --name $WorkspaceName --location $Location --sku standard
         if ($LASTEXITCODE -ne 0) { throw "Failed to create Databricks workspace" }
+
+        # Save resource details
+        Save-ResourceDetails -ResourceGroupName $ResourceGroupName -WorkspaceName $WorkspaceName
 
         # Prompt user to configure Databricks CLI
         Write-Host "Please configure the Databricks CLI by entering the workspace URL and personal access token (PAT)."

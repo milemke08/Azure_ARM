@@ -104,7 +104,7 @@ echo `Initialization script executed.`
         $TempFilePath = [System.IO.Path]::GetTempFileName()
         Set-Content -Path $TempFilePath -Value $InitScriptContent -Encoding UTF8
 
-        databricks workspace import $TempFilePath /init/init.sh --overwrite --language SCALA
+        databricks workspace import $TempFilePath /init/cluster-init.sh --overwrite --language SCALA
         if ($LASTEXITCODE -ne 0) { throw "Failed to upload 'init.sh' to '/init' folder in Databricks workspace" }
 
         # Cleanup temporary file

@@ -49,8 +49,7 @@ function Save-ResourceDetails {
         $directory = "C:\Users\zdoi\Documents\Python\Azure\AzureSDK\Azure_SDK\databricks\"
         # Define the full file path
         $fileName = Join-Path -Path $directory -ChildPath "$WorkspaceName`_resource_details.json"
-        # $fileName = "/databricks/$WorkspaceName`_resource_details.json"
-        # $fileName = "$WorkspaceName`_resource_details.json"
+        
         $outputData = @{
             ResourceID = $resourceId
             ResourceDetails = $resourceDetailsObject
@@ -65,7 +64,7 @@ function Save-ResourceDetails {
 }
 
 
-function Create-DatabricksWorkspace {
+function New-DatabricksWorkspace {
     param (
         [string]$ResourceGroupName,
         [string]$Location,
@@ -90,6 +89,29 @@ function Create-DatabricksWorkspace {
         databricks configure --token
         if ($LASTEXITCODE -ne 0) { throw "Failed to configure Databricks CLI" }
 
+        
+        
+        # Create a new folder in the main Databricks workspace called 'init'
+        databricks workspace mkdirs /init
+        if ($LASTEXITCODE -ne 0) { throw "Failed to create '/init' folder in Databricks workspace" }
+        
+        # Add a file named 'init.sh' to the 'init' folder
+$InitScriptContent = @"
+#!/bin/bash
+# Example initialization script
+echo `Initialization script executed.`
+"@
+        $TempFilePath = [System.IO.Path]::GetTempFileName()
+        Set-Content -Path $TempFilePath -Value $InitScriptContent -Encoding UTF8
+
+        databricks workspace import $TempFilePath /init/init.sh --overwrite --language SCALA
+        if ($LASTEXITCODE -ne 0) { throw "Failed to upload 'init.sh' to '/init' folder in Databricks workspace" }
+
+        # Cleanup temporary file
+        Remove-Item -Path $TempFilePath -Force
+
+        Write-Host "Successfully created and configured the Databricks workspace."
+
         # Create the cluster using the JSON configuration
         databricks clusters create --json-file $ClusterConfigFilePath
         if ($LASTEXITCODE -ne 0) { throw "Failed to create Databricks cluster" }
@@ -108,7 +130,7 @@ try {
     Update-EnvFile -FilePath $EnvFilePath -WorkspaceName $WorkspaceName
 
     # Create Databricks workspace and cluster
-    Create-DatabricksWorkspace -ResourceGroupName $ResourceGroupName -Location $Location -WorkspaceName $WorkspaceName -ClusterConfigFilePath $ClusterConfigFilePath
+    New-DatabricksWorkspace -ResourceGroupName $ResourceGroupName -Location $Location -WorkspaceName $WorkspaceName -ClusterConfigFilePath $ClusterConfigFilePath
 
     Write-Host "Databricks workspace and cluster created successfully."
 } catch {

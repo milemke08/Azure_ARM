@@ -1,0 +1,115 @@
+# Creates a Python virtual environment, installs requirements, sets the VS Code interpreter
+# and creates a `.env` template in the repository root.
+#
+param(
+    [string]$VenvName = ".venv",
+    [switch]$Force,
+    [string]$PythonExecutable = "python"
+)
+
+# Usage examples:
+#   .\setup_env.ps1                        # create .venv, install, create .env
+#   .\setup_env.ps1 -VenvName myenv -Force # recreate venv and overwrite .env
+# Paths
+$scriptDir = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
+$repoRoot = (Resolve-Path (Join-Path $scriptDir "..")).Path
+$venvPath = Join-Path $repoRoot $VenvName
+
+function Write-ErrAndExit([string]$msg) {
+    Write-Error $msg
+    exit 1
+}
+
+Write-Output "Repository root: $repoRoot"
+
+# Check python availability
+try {
+    & $PythonExecutable --version 2>$null | Out-Null
+} catch {
+    Write-ErrAndExit "Python executable '$PythonExecutable' not found. Provide a valid Python on PATH or set -PythonExecutable to the full path." 
+}
+
+if (Test-Path $venvPath) {
+    if ($Force) {
+        Write-Output "Removing existing virtual environment at $venvPath (because -Force was passed)..."
+        Remove-Item -Recurse -Force -Path $venvPath
+    } else {
+        Write-Output "Virtual environment already exists at: $venvPath"
+        Write-Output "Use -Force to recreate, or re-run the installer to only configure interpreter and .env."
+    }
+}
+
+# Create venv if it doesn't exist
+if (-not (Test-Path $venvPath)) {
+    Write-Output "Creating virtual environment '$VenvName'..."
+    $proc = Start-Process -FilePath $PythonExecutable -ArgumentList "-m","venv",$venvPath -NoNewWindow -Wait -PassThru
+    if ($proc.ExitCode -ne 0) { Write-ErrAndExit "Failed to create virtual environment (exit code $($proc.ExitCode))." }
+    Write-Output "Virtual environment created at: $venvPath"
+} else {
+    Write-Output "Using existing virtual environment at: $venvPath"
+}
+
+# Determine python executable inside venv
+$venvPython = Join-Path $venvPath "Scripts\python.exe"
+if (-not (Test-Path $venvPython)) { Write-ErrAndExit "Python executable not found inside venv at: $venvPython" }
+
+# Upgrade pip and install requirements
+$requirementsFile = Join-Path $repoRoot "requirements.txt"
+if (Test-Path $requirementsFile) {
+    Write-Output "Upgrading pip and installing requirements from $requirementsFile..."
+    & $venvPython -m pip install --upgrade pip setuptools wheel
+    if ($LASTEXITCODE -ne 0) { Write-ErrAndExit "Failed to upgrade pip." }
+    & $venvPython -m pip install -r $requirementsFile
+    if ($LASTEXITCODE -ne 0) { Write-ErrAndExit "Failed to install requirements from $requirementsFile." }
+    Write-Output "Requirements installed successfully."
+} else {
+    Write-Output "No requirements.txt found at $requirementsFile — skipping pip installs."
+}
+
+# Create or update VS Code workspace setting for interpreter
+$vscodeDir = Join-Path $repoRoot ".vscode"
+if (-not (Test-Path $vscodeDir)) { New-Item -ItemType Directory -Path $vscodeDir | Out-Null }
+$settingsFile = Join-Path $vscodeDir "settings.json"
+
+$settings = @{}
+if (Test-Path $settingsFile) {
+    try { $settings = Get-Content $settingsFile -Raw | ConvertFrom-Json } catch { $settings = @{} }
+}
+$settings["python.defaultInterpreterPath"] = $venvPython
+$settings | ConvertTo-Json -Depth 5 | Set-Content -Path $settingsFile -Encoding utf8
+Write-Output "VS Code workspace setting written to: $settingsFile"
+
+# Create .env template in repo root
+$envFile = Join-Path $repoRoot ".env"
+if ((Test-Path $envFile) -and (-not $Force)) {
+    Write-Output ".env already exists at $envFile. Use -Force to overwrite or edit it manually."
+} else {
+    $envTemplate = @"
+# Azure subscription and tenant
+SUBSCRIPTION_ID=
+TENANT_ID=
+
+# Optional service principal credentials (for non-interactive login)
+CLIENT_ID=
+CLIENT_SECRET=
+
+# Common resource names
+RESOURCE_GROUP_NAME=
+LOCATION=East US
+
+# Storage and SQL
+STORAGE_ACCOUNT_NAME=
+STORAGE_ACCOUNT_KEY=
+SQL_SERVER_NAME=
+SQL_DATABASE_NAME=
+ADMIN_USER=
+ADMIN_PASSWORD=
+
+# Databricks
+DATABRICKS_WORKSPACE_NAME=
+"@
+    Set-Content -Path $envFile -Value $envTemplate -Encoding utf8
+    Write-Output ".env template created at: $envFile"
+}
+
+Write-Output "Setup finished. To activate the virtual environment in this session run:`n    & '$venvPath\Scripts\Activate.ps1'`nOr dot-source the Activate script:`n    . '$venvPath\Scripts\Activate.ps1'"

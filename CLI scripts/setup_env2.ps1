@@ -61,5 +61,5 @@ if (Test-Path $requirementsFile) {
     if ($LASTEXITCODE -ne 0) { Write-ErrAndExit "Failed to install requirements from $requirementsFile." }
     Write-Output "Requirements installed successfully."
 } else {
-    Write-Output "No requirements.txt found at $requirementsFile — skipping pip installs."
+    Write-Output "No requirements.txt found at $requirementsFile : skipping pip installs."
 }

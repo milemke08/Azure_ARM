@@ -1,6 +1,7 @@
 
 # Python environment
 myenv
+.venv
 
 # Ignore all log files
 *.log

@@ -112,4 +112,13 @@ DATABRICKS_WORKSPACE_NAME=
     Write-Output ".env template created at: $envFile"
 }
 
-Write-Output "Setup finished. To activate the virtual environment in this session run:`n    & '$venvPath\Scripts\Activate.ps1'`nOr dot-source the Activate script:`n    . '$venvPath\Scripts\Activate.ps1'"
+$finishMsg = @"
+Setup finished.
+
+To activate the virtual environment in this session run:
+    & '$venvPath\Scripts\Activate.ps1'
+
+Or dot-source the Activate script:
+    . '$venvPath\Scripts\Activate.ps1'
+"@
+Write-Output $finishMsg

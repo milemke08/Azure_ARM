@@ -45,3 +45,21 @@ if (-not (Test-Path $venvPath)) {
 } else {
     Write-Output "Using existing virtual environment at: $venvPath"
 }
+
+
+# Determine python executable inside venv
+$venvPython = Join-Path $venvPath "Scripts\python.exe"
+if (-not (Test-Path $venvPython)) { Write-ErrAndExit "Python executable not found inside venv at: $venvPython" }
+
+# Upgrade pip and install requirements
+$requirementsFile = Join-Path $repoRoot "requirements.txt"
+if (Test-Path $requirementsFile) {
+    Write-Output "Upgrading pip and installing requirements from $requirementsFile..."
+    & $venvPython -m pip install --upgrade pip setuptools wheel
+    if ($LASTEXITCODE -ne 0) { Write-ErrAndExit "Failed to upgrade pip." }
+    & $venvPython -m pip install -r $requirementsFile
+    if ($LASTEXITCODE -ne 0) { Write-ErrAndExit "Failed to install requirements from $requirementsFile." }
+    Write-Output "Requirements installed successfully."
+} else {
+    Write-Output "No requirements.txt found at $requirementsFile — skipping pip installs."
+}

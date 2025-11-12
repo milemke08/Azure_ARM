@@ -63,3 +63,50 @@ if (Test-Path $requirementsFile) {
 } else {
     Write-Output "No requirements.txt found at $requirementsFile : skipping pip installs."
 }
+
+
+# Create or update VS Code workspace setting for interpreter
+$vscodeDir = Join-Path $repoRoot ".vscode"
+if (-not (Test-Path $vscodeDir)) { New-Item -ItemType Directory -Path $vscodeDir | Out-Null }
+$settingsFile = Join-Path $vscodeDir "settings.json"
+
+$settings = @{}
+if (Test-Path $settingsFile) {
+    try { $settings = Get-Content $settingsFile -Raw | ConvertFrom-Json } catch { $settings = @{} }
+}
+$settings["python.defaultInterpreterPath"] = $venvPython
+$settings | ConvertTo-Json -Depth 5 | Set-Content -Path $settingsFile -Encoding utf8
+Write-Output "VS Code workspace setting written to: $settingsFile"
+
+# Create .env template in repo root
+$envFile = Join-Path $repoRoot ".env"
+if ((Test-Path $envFile) -and (-not $Force)) {
+    Write-Output ".env already exists at $envFile. Use -Force to overwrite or edit it manually."
+} else {
+    $envTemplate = @"
+# Azure subscription and tenant
+SUBSCRIPTION_ID=
+TENANT_ID=
+
+# Optional service principal credentials (for non-interactive login)
+CLIENT_ID=
+CLIENT_SECRET=
+
+# Common resource names
+RESOURCE_GROUP_NAME=
+LOCATION=East US
+
+# Storage and SQL
+STORAGE_ACCOUNT_NAME=
+STORAGE_ACCOUNT_KEY=
+SQL_SERVER_NAME=
+SQL_DATABASE_NAME=
+ADMIN_USER=
+ADMIN_PASSWORD=
+
+# Databricks
+DATABRICKS_WORKSPACE_NAME=
+"@
+    Set-Content -Path $envFile -Value $envTemplate -Encoding utf8
+    Write-Output ".env template created at: $envFile"
+}

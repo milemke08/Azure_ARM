@@ -2,6 +2,7 @@
 # Python environment
 myenv
 .venv
+.vscode
 
 # Ignore all log files
 *.log

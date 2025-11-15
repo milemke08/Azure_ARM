@@ -85,27 +85,13 @@ if ((Test-Path $envFile) -and (-not $Force)) {
 } else {
     $envTemplate = @"
 # Azure subscription and tenant
-SUBSCRIPTION_ID=
 TENANT_ID=
+SUBSCRIPTION_ID=
 
 # Optional service principal credentials (for non-interactive login)
 CLIENT_ID=
 CLIENT_SECRET=
 
-# Common resource names
-RESOURCE_GROUP_NAME=
-LOCATION=East US
-
-# Storage and SQL
-STORAGE_ACCOUNT_NAME=
-STORAGE_ACCOUNT_KEY=
-SQL_SERVER_NAME=
-SQL_DATABASE_NAME=
-ADMIN_USER=
-ADMIN_PASSWORD=
-
-# Databricks
-DATABRICKS_WORKSPACE_NAME=
 "@
     Set-Content -Path $envFile -Value $envTemplate -Encoding utf8
     Write-Output ".env template created at: $envFile"

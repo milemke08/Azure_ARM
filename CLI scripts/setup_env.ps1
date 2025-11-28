@@ -7,27 +7,24 @@ param(
     [string]$PythonExecutable = "python"
 )
 
-# Usage examples:
-#   .\setup_env.ps1                        # create .venv, install, create .env
-#   .\setup_env.ps1 -VenvName myenv -Force # recreate venv and overwrite .env
 # Paths
 $scriptDir = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
 $repoRoot = (Resolve-Path (Join-Path $scriptDir "..")).Path
 $venvPath = Join-Path $repoRoot $VenvName
 
-function Write-ErrAndExit([string]$msg) {
-    Write-Error $msg
-    exit 1
-}
 
+Write-Output "ScriptPath root: $scriptDir"
 Write-Output "Repository root: $repoRoot"
+Write-Output "venv root: $venvPath"
 
+# Create virtual environment
 # Check python availability
 try {
-    & $PythonExecutable --version 2>$null | Out-Null
+    & $PythonExecutable --version 2>$null | Out-Null	# check python exists (run --version, hide output)
 } catch {
-    Write-ErrAndExit "Python executable '$PythonExecutable' not found. Provide a valid Python on PATH or set -PythonExecutable to the full path." 
+    Write-ErrAndExit "Python executable '$PythonExecutable' not found. Provide a valid Python on PATH or set -PythonExecutable to the full path." 	# report error and exit
 }
+
 
 if (Test-Path $venvPath) {
     if ($Force) {
@@ -49,6 +46,7 @@ if (-not (Test-Path $venvPath)) {
     Write-Output "Using existing virtual environment at: $venvPath"
 }
 
+
 # Determine python executable inside venv
 $venvPython = Join-Path $venvPath "Scripts\python.exe"
 if (-not (Test-Path $venvPython)) { Write-ErrAndExit "Python executable not found inside venv at: $venvPython" }
@@ -63,8 +61,9 @@ if (Test-Path $requirementsFile) {
     if ($LASTEXITCODE -ne 0) { Write-ErrAndExit "Failed to install requirements from $requirementsFile." }
     Write-Output "Requirements installed successfully."
 } else {
-    Write-Output "No requirements.txt found at $requirementsFile — skipping pip installs."
+    Write-Output "No requirements.txt found at $requirementsFile : skipping pip installs."
 }
+
 
 # Create or update VS Code workspace setting for interpreter
 $vscodeDir = Join-Path $repoRoot ".vscode"
@@ -86,39 +85,14 @@ if ((Test-Path $envFile) -and (-not $Force)) {
 } else {
     $envTemplate = @"
 # Azure subscription and tenant
-SUBSCRIPTION_ID=
 TENANT_ID=
+SUBSCRIPTION_ID=
 
 # Optional service principal credentials (for non-interactive login)
 CLIENT_ID=
 CLIENT_SECRET=
 
-# Common resource names
-RESOURCE_GROUP_NAME=
-LOCATION=East US
-
-# Storage and SQL
-STORAGE_ACCOUNT_NAME=
-STORAGE_ACCOUNT_KEY=
-SQL_SERVER_NAME=
-SQL_DATABASE_NAME=
-ADMIN_USER=
-ADMIN_PASSWORD=
-
-# Databricks
-DATABRICKS_WORKSPACE_NAME=
 "@
     Set-Content -Path $envFile -Value $envTemplate -Encoding utf8
     Write-Output ".env template created at: $envFile"
 }
-
-$finishMsg = @"
-Setup finished.
-
-To activate the virtual environment in this session run:
-    & '$venvPath\Scripts\Activate.ps1'
-
-Or dot-source the Activate script:
-    . '$venvPath\Scripts\Activate.ps1'
-"@
-Write-Output $finishMsg
